@@ -49,31 +49,21 @@ export default function InstructorHome() {
 
   // filter for "instr1"
   const filteredCourses = useMemo(() => {
-    const inst1Courses = courses.filter(course =>
-      course.instructor_ids.includes(currentInstructorId)
+    const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+  
+    const inst1Courses = courses.filter(
+      (course) =>
+        course.instructor_ids.includes(currentInstructorId) &&
+        course.day === today
     );
-
-    const dayOrder = {
-      Monday: 1,
-      Tuesday: 2,
-      Wednesday: 3,
-      Thursday: 4,
-      Friday: 5,
-      Saturday: 6,
-      Sunday: 7,
-    };
-
-    // sort courses chronologically
+  
     return inst1Courses.sort((a, b) => {
-      if (dayOrder[a.day] !== dayOrder[b.day]) {
-        return dayOrder[a.day] - dayOrder[b.day];
-      } else {
-        const minutesA = convertTimeToMinutes(a.time);
-        const minutesB = convertTimeToMinutes(b.time);
-        return minutesA - minutesB;
-      }
+      const minutesA = convertTimeToMinutes(a.time);
+      const minutesB = convertTimeToMinutes(b.time);
+      return minutesA - minutesB;
     });
   }, [courses]);
+  
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

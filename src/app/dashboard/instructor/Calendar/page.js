@@ -147,7 +147,7 @@ export default function InstructorCalendarPage() {
   }, [filteredCourses]);
 
   const handleEventClick = (clickInfo) => {
-    alert(`Course clicked: ${clickInfo.event.title}`);
+    router.push(`/dashboard/instructor/Attendance/${clickInfo.event.id}`);
   };
 
   return (
