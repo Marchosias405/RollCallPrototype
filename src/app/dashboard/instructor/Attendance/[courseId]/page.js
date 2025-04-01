@@ -14,6 +14,8 @@ export default function AttendanceSheet() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedAttendance, setSelectedAttendance] = useState({}); // studentId: "P" | "L" | "A" | "E"
+  const [attendanceStatusMessage, setAttendanceStatusMessage] = useState("");
+
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -58,20 +60,19 @@ export default function AttendanceSheet() {
         onConflict: ['student_id', 'course_id', 'date'],
       });
   
-    if (error) {
-      console.error("Error submitting attendance:", error.message);
-      alert("❌ Error submitting attendance.");
-    } else {
-      alert("✅ Attendance submitted successfully!");
+      if (error) {
+        console.error("Error submitting attendance:", error.message);
+        setAttendanceStatusMessage("❌ Error submitting attendance.");
+      } else {
+        setAttendanceStatusMessage("✅ Attendance is up to date.");
+        
+        const { data: updatedAttendance } = await supabase
+          .from("attendance")
+          .select("*");
       
-      // Optional: refresh attendance from DB to reflect updates
-      const { data: updatedAttendance } = await supabase
-        .from("attendance")
-        .select("*");
-      
-      setData(updatedAttendance || []);
-      setSelectedAttendance({}); // Optional: reset selections
-    }
+        setData(updatedAttendance || []);
+        // setSelectedAttendance({});
+      }      
   };
   
   
@@ -182,6 +183,11 @@ export default function AttendanceSheet() {
           >
             Submit Attendance
           </button>
+          {attendanceStatusMessage && (
+            <p className="mt-2 text-sm font-medium text-gray-700">
+              {attendanceStatusMessage}
+            </p>
+          )}
         </div>
       </div>
     </div>
