@@ -44,23 +44,38 @@ export default function AttendanceSheet() {
 
   const handleSubmitAttendance = async () => {
     const date = new Date().toISOString().split("T")[0];
-
+  
     const records = Object.entries(selectedAttendance).map(([studentId, status]) => ({
       student_id: studentId,
       course_id: selectedCourseId,
       status,
       date,
     }));
-
-    const { error } = await supabase.from("attendance").insert(records);
-
-
+  
+    const { error } = await supabase
+      .from("attendance")
+      .upsert(records, {
+        onConflict: ['student_id', 'course_id', 'date'],
+      });
+  
     if (error) {
       console.error("Error submitting attendance:", error.message);
+      alert("❌ Error submitting attendance.");
     } else {
-      alert("Attendance submitted successfully!");
+      alert("✅ Attendance submitted successfully!");
+      
+      // Optional: refresh attendance from DB to reflect updates
+      const { data: updatedAttendance } = await supabase
+        .from("attendance")
+        .select("*");
+      
+      setData(updatedAttendance || []);
+      setSelectedAttendance({}); // Optional: reset selections
     }
   };
+  
+  
+  
 
   const getButtonClass = (studentId, status) => {
     const selected = selectedAttendance[studentId];
