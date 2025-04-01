@@ -1,0 +1,57 @@
+[
+    {
+      "id": "S1A",
+      "name": "Course S1A",
+      "school_id": "S1",
+      "day": "Monday",
+      "time" : "2:00PM",
+      "instructor_ids": ["inst1"],
+      "student_ids": ["stu001", "stu002", "stu003", "stu004"]
+    },
+    {
+      "id": "S1B",
+      "name": "Course S1B",
+      "school_id": "S1",
+      "day": "Monday",
+      "time" : "2:30PM",
+      "instructor_ids": ["inst2"],
+      "student_ids": ["stu005", "stu006", "stu007", "stu008"]
+    },
+    {
+      "id": "S2A",
+      "name": "Course S2A",
+      "school_id": "S2",
+      "day": "Thursday",
+      "time" : "3:00PM",
+      "instructor_ids": ["inst1"],
+      "student_ids": ["stu013", "stu014", "stu015", "stu016"]
+    },
+    {
+      "id": "S2B",
+      "name": "Course S2B",
+      "school_id": "S2",
+      "day": "Thursday",
+      "time" : "3:30PM",
+      "instructor_ids": ["inst3"],
+      "student_ids": ["stu017", "stu018", "stu019", "stu020"]
+    },
+    {
+      "id": "S3A",
+      "name": "Course S3A",
+      "school_id": "S3",
+      "day": "Friday",
+      "time" : "2:00PM",
+      "instructor_ids": ["inst2"],
+      "student_ids": ["stu025", "stu026", "stu027", "stu028"]
+    },
+    {
+      "id": "S3B",
+      "name": "Course S3B",
+      "school_id": "S3",
+      "day": "Friday",
+      "time" : "2:30PM",
+      "instructor_ids": ["inst3"],
+      "student_ids": ["stu029", "stu030", "stu031", "stu032"]
+    }
+  ]
+  

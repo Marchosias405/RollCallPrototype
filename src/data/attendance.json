@@ -1,0 +1,53 @@
+[
+  {
+    "course_id": "S1A",
+    "student_id": "stu001",
+    "date": "2025-03-27",
+    "status": "present"
+  },
+  {
+    "course_id": "S1A",
+    "student_id": "stu002",
+    "date": "2025-03-27",
+    "status": "absent"
+  },
+  {
+    "course_id": "S1A",
+    "student_id": "stu003",
+    "date": "2025-03-27",
+    "status": "present"
+  },
+  {
+    "course_id": "S1A",
+    "student_id": "stu004",
+    "date": "2025-03-27",
+    "status": "late"
+  },
+  {
+    "course_id": "S2B",
+    "student_id": "stu018",
+    "date": "2025-03-27",
+    "status": "present"
+  },
+  {
+    "course_id": "S2B",
+    "student_id": "stu020",
+    "date": "2025-03-27",
+    "status": "present"
+  },
+  {
+    "course_id": "S2B",
+    "student_id": "stu017",
+    "date": "2025-03-27",
+    "status": "absent"
+  },
+  {
+    "course_id": "S2B",
+    "student_id": "stu019",
+    "date": "2025-03-27",
+    "status": "absent"
+  }
+  
+]
+
+  

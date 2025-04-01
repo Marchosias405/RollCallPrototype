@@ -1,0 +1,32 @@
+[
+  { "id": "stu001", "name": "Ava Kim", "course_id": "S1A", "emergency_contact": { "name": "Soojin Kim", "phone": "604-111-1111" }, "notes": "Peanut allergy" },
+  { "id": "stu002", "name": "Leo Wang", "course_id": "S1A", "emergency_contact": { "name": "Tom Wang", "phone": "604-111-1112" }, "notes": "" },
+  { "id": "stu003", "name": "Maya Patel", "course_id": "S1A", "emergency_contact": { "name": "Raj Patel", "phone": "604-111-1113" }, "notes": "Asthma" },
+  { "id": "stu004", "name": "Liam Johnson", "course_id": "S1A", "emergency_contact": { "name": "Sara Johnson", "phone": "604-111-1114" }, "notes": "" },
+
+  { "id": "stu005", "name": "Zoe Chen", "course_id": "S1B", "emergency_contact": { "name": "David Chen", "phone": "604-111-1121" }, "notes": "Vegetarian" },
+  { "id": "stu006", "name": "Noah Smith", "course_id": "S1B", "emergency_contact": { "name": "Amy Smith", "phone": "604-111-1122" }, "notes": "" },
+  { "id": "stu007", "name": "Emma Garcia", "course_id": "S1B", "emergency_contact": { "name": "Luis Garcia", "phone": "604-111-1123" }, "notes": "Lactose intolerant" },
+  { "id": "stu008", "name": "Mason Lee", "course_id": "S1B", "emergency_contact": { "name": "Nancy Lee", "phone": "604-111-1124" }, "notes": "" },
+
+  { "id": "stu013", "name": "Isla Park", "course_id": "S2A", "emergency_contact": { "name": "Eric Park", "phone": "604-111-1211" }, "notes": "" },
+  { "id": "stu014", "name": "Benjamin Zhao", "course_id": "S2A", "emergency_contact": { "name": "Hui Zhao", "phone": "604-111-1212" }, "notes": "Bee sting allergy" },
+  { "id": "stu015", "name": "Chloe Adams", "course_id": "S2A", "emergency_contact": { "name": "Rachel Adams", "phone": "604-111-1213" }, "notes": "" },
+  { "id": "stu016", "name": "Lucas Wong", "course_id": "S2A", "emergency_contact": { "name": "Jason Wong", "phone": "604-111-1214" }, "notes": "EpiPen needed" },
+
+  { "id": "stu017", "name": "Elena Rivera", "course_id": "S2B", "emergency_contact": { "name": "Maria Rivera", "phone": "604-111-1221" }, "notes": "" },
+  { "id": "stu018", "name": "Henry Choi", "course_id": "S2B", "emergency_contact": { "name": "Sun Choi", "phone": "604-111-1222" }, "notes": "Nuts allergy" },
+  { "id": "stu019", "name": "Lily Thompson", "course_id": "S2B", "emergency_contact": { "name": "Paul Thompson", "phone": "604-111-1223" }, "notes": "" },
+  { "id": "stu020", "name": "Caleb Lee", "course_id": "S2B", "emergency_contact": { "name": "Anna Lee", "phone": "604-111-1224" }, "notes": "" },
+
+  { "id": "stu025", "name": "Harper Lin", "course_id": "S3A", "emergency_contact": { "name": "Angela Lin", "phone": "604-111-1311" }, "notes": "Seasonal allergies" },
+  { "id": "stu026", "name": "Owen Davis", "course_id": "S3A", "emergency_contact": { "name": "Kevin Davis", "phone": "604-111-1312" }, "notes": "" },
+  { "id": "stu027", "name": "Victoria Nguyen", "course_id": "S3A", "emergency_contact": { "name": "Lan Nguyen", "phone": "604-111-1313" }, "notes": "Asthma" },
+  { "id": "stu028", "name": "Jayden Miller", "course_id": "S3A", "emergency_contact": { "name": "Angela Miller", "phone": "604-111-1314" }, "notes": "" },
+
+  { "id": "stu029", "name": "Layla White", "course_id": "S3B", "emergency_contact": { "name": "Chloe White", "phone": "604-111-1321" }, "notes": "" },
+  { "id": "stu030", "name": "Sebastian Cho", "course_id": "S3B", "emergency_contact": { "name": "June Cho", "phone": "604-111-1322" }, "notes": "" },
+  { "id": "stu031", "name": "Penelope Baker", "course_id": "S3B", "emergency_contact": { "name": "Rachel Baker", "phone": "604-111-1323" }, "notes": "Egg allergy" },
+  { "id": "stu032", "name": "Daniel Zhang", "course_id": "S3B", "emergency_contact": { "name": "Albert Zhang", "phone": "604-111-1324" }, "notes": "" }
+
+]

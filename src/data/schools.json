@@ -1,0 +1,18 @@
+[
+    { "id": "S1",
+     "name": "Forest Grove Elementary",
+     "day" : "Monday",
+     "course_ids" : ["S1A", "S1B"]
+    },
+    { "id": "S2",
+     "name": "Cameron Elementary",
+     "day" : "Wednesday",
+     "course_ids" : ["S2A", "S2B"] 
+    },
+    { "id": "S3",
+     "name": "Sperling Elementary",
+     "day" : "Friday",
+     "course_ids" : ["S3A", "S3B"] 
+    }
+]
+  

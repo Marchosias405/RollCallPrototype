@@ -1,0 +1,40 @@
+[
+  {
+    "id": "inst1",
+    "name": "Sumant",
+    "birthdate": "2003-01-01",
+    "address": "123 Main St, City, Country",
+    "phone": "555-1234",
+    "email": "instructor1@gmail.com",
+    "classes": [
+      { "school_id": "S1", "course_id": "S1A" },
+      { "school_id": "S2", "course_id": "S2A" }
+    ]
+  },
+  {
+    "id": "inst2",
+    "name": "Jasmine Lee",
+    "birthdate": "1998-06-15",
+    "address": "456 Maple Ave, City, Country",
+    "phone": "555-5678",
+    "email": "instructor2@gmail.com",
+    "classes": [
+      { "school_id": "S1", "course_id": "S1B" },
+      { "school_id": "S3", "course_id": "S3A" }
+    ]
+  },
+  {
+    "id": "inst3",
+    "name": "David Chen",
+    "birthdate": "1995-03-20",
+    "address": "789 Oak Lane, City, Country",
+    "phone": "555-9012",
+    "email": "instructor3@gmail.com",
+    "classes": [
+      { "school_id": "S2", "course_id": "S2B" },
+      { "school_id": "S3", "course_id": "S3B" }
+    ]
+  }
+]
+
+  
