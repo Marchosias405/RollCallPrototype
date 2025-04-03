@@ -79,9 +79,11 @@ export default function InstructorCalendarPage() {
   const defaultTime = "09:00 AM";
 
   // fetch from supabase
-  const [data, setData] = useState([]); // not used
-  const [students, setStudents] = useState([]); // not used
+  const [data, setData] = useState([]); // not used in this page
+  const [students, setStudents] = useState([]); // not used in this page
   const [courses, setCourses] = useState([]);
+  // CHANGED: Added loading state for skeleton loader
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -97,6 +99,7 @@ export default function InstructorCalendarPage() {
       setData(attendance || []);
       setStudents(studentData || []);
       setCourses(courseData || []);
+      setLoading(false); // CHANGED: Data loaded, so turn off loading state
     };
     fetchAll();
   }, []);
@@ -128,7 +131,7 @@ export default function InstructorCalendarPage() {
     });
   }, [courses, currentInstructorId]);
 
-  // map to fullcalendar
+  // map courses to fullcalendar events
   const events = useMemo(() => {
     return filteredCourses.map(course => {
       const dayAbbr = convertDay(course.day);
@@ -150,12 +153,26 @@ export default function InstructorCalendarPage() {
     router.push(`/dashboard/instructor/Attendance/${clickInfo.event.id}`);
   };
 
+  // CHANGED: Render a skeleton UI while loading data
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-center">
+        <div className="max-w-7xl w-full">
+          {/* Skeleton for heading */}
+          <div className="h-10 bg-gray-300 rounded animate-pulse mb-6 w-1/2"></div>
+          {/* Skeleton for calendar container */}
+          <div className="bg-white shadow-lg rounded-lg p-4">
+            <div className="h-80 bg-gray-300 rounded animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-extrabold text-gray-800 mb-6">
-          Calendar
-        </h1>
+        <h1 className="text-4xl font-extrabold text-gray-800 mb-6">Calendar</h1>
         <div className="bg-white shadow-lg rounded-lg p-4">
           <FullCalendar
             plugins={[

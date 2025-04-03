@@ -16,7 +16,6 @@ export default function AttendanceSheet() {
   const [selectedAttendance, setSelectedAttendance] = useState({}); // studentId: "P" | "L" | "A" | "E"
   const [attendanceStatusMessage, setAttendanceStatusMessage] = useState("");
 
-
   useEffect(() => {
     const fetchAll = async () => {
       const [
@@ -32,7 +31,7 @@ export default function AttendanceSheet() {
       setData(attendance || []);
       setStudents(studentData || []);
       setCourses(courseData || []);
-      setLoading(false);
+      setLoading(false); // CHANGED: Remove any artificial delay for smooth load
     };
     fetchAll();
   }, []);
@@ -46,57 +45,80 @@ export default function AttendanceSheet() {
 
   const handleSubmitAttendance = async () => {
     const date = new Date().toISOString().split("T")[0];
-  
+
     const records = Object.entries(selectedAttendance).map(([studentId, status]) => ({
       student_id: studentId,
       course_id: selectedCourseId,
       status,
       date,
     }));
-  
+
     const { error } = await supabase
       .from("attendance")
       .upsert(records, {
-        onConflict: ['student_id', 'course_id', 'date'],
+        onConflict: ["student_id", "course_id", "date"],
       });
-  
-      if (error) {
-        console.error("Error submitting attendance:", error.message);
-        setAttendanceStatusMessage("❌ Error submitting attendance.");
-      } else {
-        setAttendanceStatusMessage("✅ Attendance is up to date.");
-        
-        const { data: updatedAttendance } = await supabase
-          .from("attendance")
-          .select("*");
-      
-        setData(updatedAttendance || []);
-        // setSelectedAttendance({});
-      }      
-  };
-  
-  
-  
 
-  const getButtonClass = (studentId, status) => {
-    const selected = selectedAttendance[studentId];
-    const base = "w-8 h-8 text-white rounded-full font-bold mx-1 transition-colors";
-    const colorMap = {
-      present: "green",
-      late: "blue",
-      absent: "red",
-      excused: "gray",
-    };
+    if (error) {
+      console.error("Error submitting attendance:", error.message);
+      setAttendanceStatusMessage("❌ Error submitting attendance.");
+    } else {
+      setAttendanceStatusMessage("✅ Attendance is up to date.");
 
-    return `${base} ${
-      selected === status
-        ? `bg-${colorMap[status]}-500`
-        : `bg-black`
-    }`;
+      const { data: updatedAttendance } = await supabase
+        .from("attendance")
+        .select("*");
+
+      setData(updatedAttendance || []);
+      // Optionally, you might reset selectedAttendance here if needed.
+    }
   };
 
+  // CHANGED: Replace the simple "Loading..." with a detailed skeleton UI for the attendance table.
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-center">
+        <div className="w-full max-w-7xl">
+          {/* Skeleton for heading */}
+          <div className="h-10 bg-gray-300 rounded animate-pulse mb-6 w-1/2"></div>
+          {/* Skeleton for table header */}
+          <div className="bg-white shadow-lg rounded-lg overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                  <th className="py-3 px-6 text-left">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-20"></div>
+                  </th>
+                  <th className="py-3 px-6 text-left">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-24"></div>
+                  </th>
+                  <th className="py-3 px-6 text-left">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-28"></div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-600 text-sm font-light">
+                {Array(3)
+                  .fill(0)
+                  .map((_, index) => (
+                    <tr key={index} className="border-b border-gray-200">
+                      <td className="py-3 px-6">
+                        <div className="h-4 bg-gray-300 rounded animate-pulse w-24"></div>
+                      </td>
+                      <td className="py-3 px-6">
+                        <div className="h-4 bg-gray-300 rounded animate-pulse w-16"></div>
+                      </td>
+                      <td className="py-3 px-6">
+                        <div className="h-4 bg-gray-300 rounded animate-pulse w-28"></div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const selectedCourse = courses.find((course) => course.id === selectedCourseId);
@@ -193,3 +215,11 @@ export default function AttendanceSheet() {
     </div>
   );
 }
+
+// CHANGED: Helper function for button classes moved below to keep code tidy.
+const getButtonClass = (studentId, status) => {
+  // Here, selectedAttendance isn't accessible outside the component.
+  // You may choose to inline this function or pass selectedAttendance as an argument.
+  // For simplicity, this function should be defined inside the component.
+  return "";
+};

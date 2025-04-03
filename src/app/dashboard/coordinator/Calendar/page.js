@@ -28,15 +28,12 @@ function getNextOccurrence(dayAbbr, timeStr) {
   }
 
   let hours, minutes;
-
   if (timeStr.includes("AM") || timeStr.includes("PM")) {
-    // 12-hour format (e.g., "02:30 PM")
     const [time, modifier] = timeStr.split(" ");
     [hours, minutes] = time.split(":").map(Number);
     if (modifier === "PM" && hours !== 12) hours += 12;
     if (modifier === "AM" && hours === 12) hours = 0;
   } else {
-    // 24-hour format (e.g., "13:30")
     [hours, minutes] = timeStr.split(":").map(Number);
   }
 
@@ -48,15 +45,13 @@ function getNextOccurrence(dayAbbr, timeStr) {
   const targetDate = new Date(now);
   targetDate.setDate(now.getDate() + daysToAdd);
   targetDate.setHours(hours, minutes, 0, 0);
-
   if (targetDate < now) {
     targetDate.setDate(targetDate.getDate() + 7);
   }
-
   return targetDate.toISOString();
 }
 
-// helper to convert full day names to their abbreviated form
+// helper to convert full day names to abbreviated form
 function convertDay(dayFull) {
   const mapping = {
     "Monday": "Mon",
@@ -71,15 +66,13 @@ function convertDay(dayFull) {
 }
 
 export default function CoordinatorCalendarPage() {
-  const [schoolData, setSchoolData] = useState([]);
+  const [loading, setLoading] = useState(true); // loading state
   const [events, setEvents] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
     const fetchAll = async () => {
-      const [
-        { data: schoolData },
-      ] = await Promise.all([
+      const [{ data: schoolData }] = await Promise.all([
         supabase.from("School").select("*"),
       ]);
       console.log("Fetched school data:", schoolData);
@@ -88,7 +81,6 @@ export default function CoordinatorCalendarPage() {
         const dayAbbr = convertDay(school.day);
         const timeStr = school.time;
         const dtstart = getNextOccurrence(dayAbbr, timeStr);
-
         return {
           id: school.id.toString(),
           title: school.name,
@@ -100,22 +92,39 @@ export default function CoordinatorCalendarPage() {
         };
       });
 
+      // CHANGED: Removed artificial delay. Data is set immediately.
       setEvents(mappedEvents);
+      setLoading(false);
     };
 
     fetchAll();
   }, []);
 
   const handleEventClick = (clickInfo) => {
-    router.push(`/dashboard/coordinator/Schools?school=${encodeURIComponent(clickInfo.event.title)}`);
+    router.push(
+      `/dashboard/coordinator/Schools?school=${encodeURIComponent(clickInfo.event.title)}`
+    );
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-5 flex flex-col items-center overflow-auto">
+        <div className="w-full max-w-7xl mx-auto">
+          {/* Skeleton for heading */}
+          <div className="h-10 bg-gray-300 rounded animate-pulse mb-8 w-1/3"></div>
+          {/* Skeleton for calendar content */}
+          <div className="bg-white shadow-lg rounded-lg p-4">
+            <div className="h-80 bg-gray-300 rounded animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-5 flex flex-col items-center overflow-auto">
       <div className="w-full max-w-7xl mx-auto">
-        <h1 className="text-4xl font-extrabold text-gray-800 mb-8">
-          Calendar
-        </h1>
+        <h1 className="text-4xl font-extrabold text-gray-800 mb-8">Calendar</h1>
         <div className="bg-white shadow-lg rounded-lg p-4">
           <FullCalendar
             plugins={[

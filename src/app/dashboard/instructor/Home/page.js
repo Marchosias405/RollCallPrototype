@@ -23,6 +23,9 @@ function convertTimeToMinutes(timeStr) {
 export default function InstructorHome() {
   const router = useRouter();
   const currentInstructorId = "inst1";
+
+  // CHANGED: Added loading state to control skeleton display.
+  const [loading, setLoading] = useState(true);
   
   const [data, setData] = useState([]);       // not used
   const [students, setStudents] = useState([]); // not used 
@@ -43,11 +46,12 @@ export default function InstructorHome() {
       setData(attendance || []);
       setStudents(studentData || []);
       setCourses(courseData || []);
+      setLoading(false); // CHANGED: Data loaded—turn off loading state.
     };
     fetchAll();
   }, []);
 
-  // filter for "instr1"
+  // filter for "instr1" based on today's day
   const filteredCourses = useMemo(() => {
     const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
   
@@ -62,8 +66,60 @@ export default function InstructorHome() {
       const minutesB = convertTimeToMinutes(b.time);
       return minutesA - minutesB;
     });
-  }, [courses]);
-  
+  }, [courses, currentInstructorId]);
+
+  // CHANGED: If loading, render a skeleton UI.
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-center">
+        <div className="max-w-7xl mx-auto w-full">
+          {/* Skeleton for page heading */}
+          <div className="h-10 bg-gray-300 rounded animate-pulse mb-6 w-1/2"></div>
+          {/* Skeleton for table header */}
+          <div className="overflow-x-auto shadow-lg rounded-lg">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="py-3 px-6">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-24"></div>
+                  </th>
+                  <th className="py-3 px-6">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-24"></div>
+                  </th>
+                  <th className="py-3 px-6">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-24"></div>
+                  </th>
+                  <th className="py-3 px-6">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-20"></div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {Array(3)
+                  .fill(0)
+                  .map((_, idx) => (
+                    <tr key={idx}>
+                      <td className="py-4 px-6">
+                        <div className="h-4 bg-gray-300 rounded animate-pulse w-32"></div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="h-4 bg-gray-300 rounded animate-pulse w-24"></div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="h-4 bg-gray-300 rounded animate-pulse w-20"></div>
+                      </td>
+                      <td className="py-4 px-6 text-center">
+                        <div className="h-8 bg-gray-300 rounded animate-pulse w-16"></div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

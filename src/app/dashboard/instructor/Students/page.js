@@ -31,7 +31,7 @@ export default function InstructorStudents() {
     fetchAll();
   }, []);
 
-  // filter courses
+  // filter courses taught by the instructor
   const coursesTaught = useMemo(() => {
     return courses.filter((course) =>
       course.instructor_ids.includes(currentInstructorId)
@@ -43,22 +43,67 @@ export default function InstructorStudents() {
     [coursesTaught]
   );
 
-  // filter students 
+  // filter students enrolled in those courses
   const filteredStudents = useMemo(() => {
     return students.filter((student) => courseIds.includes(student.course_id));
   }, [students, courseIds]);
 
   const [selectedStudent, setSelectedStudent] = useState(null);
 
-  //get course details from the courses 
+  // CHANGED: Define getCourseDetails only once
   const getCourseDetails = (courseId) => {
     return courses.find((course) => course.id === courseId);
   };
 
+  // CHANGED: If data is still loading, render a skeleton loader.
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-        Loading...
+      <div className="min-h-screen bg-gray-100 flex flex-col items-center p-6">
+        <div className="max-w-7xl mx-auto w-full">
+          {/* Skeleton for page heading */}
+          <div className="h-10 bg-gray-300 rounded animate-pulse mb-6 w-1/2"></div>
+          {/* Skeleton for table header and rows */}
+          <div className="bg-white shadow-lg rounded-lg p-4 overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="py-3 px-6">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-32"></div>
+                  </th>
+                  <th className="py-3 px-6">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-24"></div>
+                  </th>
+                  <th className="py-3 px-6">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-24"></div>
+                  </th>
+                  <th className="py-3 px-6">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-20"></div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {Array(3)
+                  .fill(0)
+                  .map((_, idx) => (
+                    <tr key={idx}>
+                      <td className="py-4 px-6">
+                        <div className="h-4 bg-gray-300 rounded animate-pulse w-32"></div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="h-4 bg-gray-300 rounded animate-pulse w-20"></div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="h-4 bg-gray-300 rounded animate-pulse w-20"></div>
+                      </td>
+                      <td className="py-4 px-6 text-center">
+                        <div className="h-8 bg-gray-300 rounded animate-pulse w-16"></div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     );
   }

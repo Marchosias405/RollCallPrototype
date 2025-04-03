@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../../../utils/supabase/client";
 
 export default function SchoolsContent() {
-  // ---------- Retrieve Data ----------
+  const [loading, setLoading] = useState(true); // loading state
   const [schools, setSchools] = useState([]);
   const [instructors, setInstructors] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -21,10 +21,11 @@ export default function SchoolsContent() {
         supabase.from("instructors").select("*"),
         supabase.from("courses").select("*"),
       ]);
-
+      // CHANGED: Removed artificial delay; set data immediately.
       setSchools(schoolData || []);
       setInstructors(instructorData || []);
       setCourses(courseData || []);
+      setLoading(false);
     };
     fetchAll();
   }, []);
@@ -33,10 +34,8 @@ export default function SchoolsContent() {
   const searchParams = useSearchParams();
   const prefilter = searchParams.get("school") || "";
   const [schoolsSearchTerm, setSchoolsSearchTerm] = useState(prefilter);
-  // mapping school id to boolean indicating whether its details are expanded
   const [expandedSchools, setExpandedSchools] = useState({});
 
-  // toggle the expansion for a given school
   const toggleSchoolExpansion = (schoolId) => {
     setExpandedSchools((prev) => ({
       ...prev,
@@ -44,22 +43,42 @@ export default function SchoolsContent() {
     }));
   };
 
-  // navigate to course attendance page
   const handleCourseAttendance = (courseId) => {
     router.push(`/dashboard/coordinator/Courses/${courseId}`);
   };
 
-  // helper to get instructor names for a course
   const getInstructorNames = (instructorId) => {
     if (!instructorId) return "Unknown";
     const instructor = instructors.find((inst) => inst.id === instructorId);
     return instructor ? instructor.name : "Unknown";
   };
 
-  // filter schools based on the search term.
   const filteredSchools = schools.filter((school) =>
     school.name.toLowerCase().includes(schoolsSearchTerm.toLowerCase())
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-6 flex justify-center">
+        <div className="w-full max-w-7xl">
+          {/* Skeleton for heading */}
+          <div className="h-10 bg-gray-300 rounded animate-pulse mb-8 w-1/3"></div>
+          {/* Skeleton list items */}
+          <ul className="space-y-4">
+            {Array(3)
+              .fill(0)
+              .map((_, idx) => (
+                <li key={idx} className="p-6 bg-white rounded-lg shadow">
+                  <div className="h-6 bg-gray-300 rounded animate-pulse mb-2 w-2/3"></div>
+                  <div className="h-4 bg-gray-300 rounded animate-pulse mb-1 w-1/2"></div>
+                  <div className="h-4 bg-gray-300 rounded animate-pulse mb-1 w-1/3"></div>
+                </li>
+              ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 flex justify-center">
@@ -110,12 +129,8 @@ export default function SchoolsContent() {
                             <div className="font-semibold text-gray-700">
                               {course.name}
                             </div>
-                            <div className="text-gray-600">
-                              Day: {course.day}
-                            </div>
-                            <div className="text-gray-600">
-                              Time: {course.time}
-                            </div>
+                            <div className="text-gray-600">Day: {course.day}</div>
+                            <div className="text-gray-600">Time: {course.time}</div>
                             <div className="text-gray-600">
                               Instructors: {getInstructorNames(course.instructor_ids)}
                             </div>

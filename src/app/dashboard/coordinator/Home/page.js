@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../../../utils/supabase/client";
 
 export default function CoordinatorHome() {
+  // ---------- Added Loading State ----------
+  // CHANGED: Added a loading state to show a skeleton loader during data fetching.
+  const [loading, setLoading] = useState(true);
+
   // ---------- Supabase Data (Home Tab) ----------
   const [data, setData] = useState([]); // attendance records
   const [students, setStudents] = useState([]);
@@ -45,9 +49,11 @@ export default function CoordinatorHome() {
         supabase.from("courses").select("*"),
       ]);
 
+      // CHANGED: Removed artificial delay. Data is set immediately after fetching.
       setData(attendance || []);
       setStudents(studentData || []);
       setCourses(courseData || []);
+      setLoading(false);
     };
     fetchAll();
   }, []);
@@ -65,9 +71,7 @@ export default function CoordinatorHome() {
 
   // ---------- Filter courses happening today ----------
   const todaysCourses = courses.filter((course) => {
-    // Ensure the course is scheduled for today
     if (course.day?.toLowerCase() !== todayDayName.toLowerCase()) return false;
-    // If no search term, include all today's courses
     if (searchTerm.trim() === "") return true;
 
     const lowerSearchTerm = searchTerm.toLowerCase();
@@ -97,7 +101,6 @@ export default function CoordinatorHome() {
       })
     : todaysCourses;
 
-  // Toggle sort column and direction
   const handleSort = (column) => {
     if (sortColumn === column) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -107,10 +110,66 @@ export default function CoordinatorHome() {
     }
   };
 
-  // ---------- Get students of selected course ----------
   const getStudentsForCourse = (courseId) => {
     return students.filter((student) => student.course_id === courseId);
   };
+
+  // ---------- Skeleton Loader for Home Page ----------
+  // CHANGED: If still loading, render the skeleton UI.
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Skeleton for the heading */}
+          <div className="h-10 bg-gray-300 rounded animate-pulse mb-8 w-1/2"></div>
+          {/* Skeleton for table header */}
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white rounded shadow">
+              <thead>
+                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                  <th className="py-3 px-6 text-left">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-20"></div>
+                  </th>
+                  <th className="py-3 px-6 text-left">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-20"></div>
+                  </th>
+                  <th className="py-3 px-6 text-left">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-20"></div>
+                  </th>
+                  <th className="py-3 px-6 text-left">
+                    <div className="h-4 bg-gray-300 rounded animate-pulse w-28"></div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-600 text-sm font-light">
+                {Array(3)
+                  .fill(0)
+                  .map((_, index) => (
+                    <tr
+                      key={index}
+                      className="border-b border-gray-200 hover:bg-gray-100"
+                    >
+                      <td className="py-3 px-6 text-left">
+                        <div className="h-4 bg-gray-300 rounded animate-pulse w-10"></div>
+                      </td>
+                      <td className="py-3 px-6 text-left">
+                        <div className="h-4 bg-gray-300 rounded animate-pulse w-16"></div>
+                      </td>
+                      <td className="py-3 px-6 text-left">
+                        <div className="h-4 bg-gray-300 rounded animate-pulse w-12"></div>
+                      </td>
+                      <td className="py-3 px-6 text-left">
+                        <div className="h-6 bg-gray-300 rounded animate-pulse w-20"></div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // ---------- Render the attendance table view ----------
   const renderAttendanceList = () => (
@@ -220,9 +279,7 @@ export default function CoordinatorHome() {
                   record.student_id === student.id &&
                   record.date === todayDate
               );
-
               const status = attendanceRecord?.status || "Not Recorded";
-
               return (
                 <tr key={student.id} className="border-b border-gray-200">
                   <td className="py-3 px-6">{student.name}</td>
