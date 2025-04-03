@@ -153,7 +153,7 @@ export default function CoordinatorHome() {
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
                 <td className="py-3 px-6 text-left whitespace-nowrap">
-                 {course.id}
+                  {course.id}
                 </td>
                 <td className="py-3 px-6 text-left whitespace-nowrap">
                   {course.day}
@@ -162,17 +162,18 @@ export default function CoordinatorHome() {
                   {course.time}
                 </td>
                 <td className="py-3 px-6 text-left whitespace-nowrap">
-                <td className="py-3 px-6 text-left whitespace-nowrap">
                   <button
                     className={`px-4 py-2 rounded text-white ${
-                      isAttendanceComplete(course.id) ? "bg-green-500" : "bg-red-500"
+                      isAttendanceComplete(course.id)
+                        ? "bg-green-500"
+                        : "bg-red-500"
                     }`}
                     onClick={() => setSelectedCourseId(course.id)}
                   >
-                    {isAttendanceComplete(course.id) ? "Marked" : "Not Marked"}
+                    {isAttendanceComplete(course.id)
+                      ? "Marked"
+                      : "Not Marked"}
                   </button>
-                </td>
-
                 </td>
               </tr>
             ))}

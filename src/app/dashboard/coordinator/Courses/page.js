@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import initialSchools from "../../../../data/schools.json";
 import initialInstructors from "../../../../data/instructors.json";
 import initialStudents from "../../../../data/students.json";
 
 export default function CoordinatorCourses() {
-    // ---------- Courses States ----------
+  // Add a loading state
+  const [loading, setLoading] = useState(true);
+
+  // ---------- Courses States ----------
   const [courses, setCourses] = useState([
     {
       id: 1,
@@ -23,18 +26,26 @@ export default function CoordinatorCourses() {
   const [selectedSchool, setSelectedSchool] = useState(null);
   const [schoolsSearchTerm, setSchoolsSearchTerm] = useState("");
 
-    // ---------- Courses Functions ----------
-  const updateCourse = (updatedCourse) => {
-    setCourses(courses.map((c) => (c.id === updatedCourse.id ? updatedCourse : c)));
-    setSelectedCourse(updatedCourse);
-  };
-
   // ---------- Instructors States ----------
   const [instructors, setInstructors] = useState(initialInstructors);
   const [instructorsSearchTerm, setInstructorsSearchTerm] = useState("");
 
   // ---------- Students Data (mapped by school id) ----------
   const [schoolStudents, setSchoolStudents] = useState(initialStudents);
+
+  // Simulate data loading delay (replace with your async fetch when ready)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000); // 1-second delay
+    return () => clearTimeout(timer);
+  }, []);
+
+  // ---------- Courses Functions ----------
+  const updateCourse = (updatedCourse) => {
+    setCourses(courses.map((c) => (c.id === updatedCourse.id ? updatedCourse : c)));
+    setSelectedCourse(updatedCourse);
+  };
 
   const handleAddCourse = () => {
     const courseCode = prompt("Enter course code:");
@@ -66,7 +77,6 @@ export default function CoordinatorCourses() {
   };
 
   const handleAssignSchool = (course) => {
-    // Use schoolsData for the list
     const schoolListStr = schoolsData.map((s) => `${s.id}: ${s.name}`).join("\n");
     const input = prompt(`Enter school ID to assign:\n${schoolListStr}`);
     const schoolId = parseInt(input, 10);
@@ -87,7 +97,6 @@ export default function CoordinatorCourses() {
     updateCourse({ ...course, assignedStudents: updatedStudents });
   };
 
-  // New: Toggle instructor assignment for the course
   const handleToggleInstructorAssignment = (course, instructorId) => {
     let updatedInstructors;
     if (course.assignedInstructors.includes(instructorId)) {
@@ -167,7 +176,6 @@ export default function CoordinatorCourses() {
             )}
           </div>
         )}
-        {/* Instructors Assignment Section */}
         <div>
           <h3 className="text-xl font-bold mb-2">Instructors for this Course:</h3>
           {instructors.length > 0 ? (
@@ -246,6 +254,19 @@ export default function CoordinatorCourses() {
       </ul>
     </div>
   );
+
+  // Render the skeleton loader while data is loading
+  if (loading) {
+    return (
+      <div className="p-4">
+        <div className="animate-pulse space-y-4">
+          <div className="h-6 bg-gray-300 rounded w-1/2"></div>
+          <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+          <div className="h-6 bg-gray-300 rounded w-2/3"></div>
+        </div>
+      </div>
+    );
+  }
 
   return selectedCourse ? renderCourseDetails() : renderCourseList();
 }
